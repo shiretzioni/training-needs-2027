@@ -25,7 +25,7 @@
 */
 
 window.SURVEY = {
-  version: "2027.1",
+  version: "2027.2",
   minutes: 4,
 
   weights: { tokens: 1, pick: 3, swipeYes: 2, swipeSome: 1 },
@@ -57,10 +57,10 @@ window.SURVEY = {
         { id: "t_time",      label: "ניהול זמן ומשימות",      theme: "self" },
         { id: "t_change",    label: "הובלת שינוי",            theme: "change" },
         { id: "t_collab",    label: "שיתוף פעולה",            theme: "partner" },
-        { id: "t_training",  label: "מיומנויות הדרכה",        theme: "develop" },
+        { id: "t_engage",    label: "מחוברות ומוטיבציה",      theme: "develop" },
         { id: "t_pressure",  label: "עבודה בלחץ ובמשבר",      theme: "change" },
         { id: "t_ownership", label: "יוזמה ואחריות אישית",    theme: "lead" },
-        { id: "t_ai",        label: "עבודה עם כלי AI",        theme: "digital" }
+        { id: "t_burnout",   label: "חוסן ושחיקה",            theme: "change" }
       ]
     },
     {
@@ -79,8 +79,7 @@ window.SURVEY = {
         { id: "m_self",      label: "ניהול עצמי",                theme: "self" },
         { id: "m_comm",      label: "תקשורת",                    theme: "comm" },
         { id: "m_teamdev",   label: "פיתוח צוות",                theme: "develop" },
-        { id: "m_feedback",  label: "משוב והערכה",               theme: "develop" },
-        { id: "m_ai",        label: "ניהול בעידן ה-AI",          theme: "digital" }
+        { id: "m_feedback",  label: "משוב והערכה",               theme: "develop" }
       ]
     },
     {
@@ -141,7 +140,8 @@ window.SURVEY = {
       prompt: "לא חובה, אבל כאן נמצאים הצרכים הכי מדויקים.",
       fields: [
         { id: "w_perfect", label: "אם הייתה הדרכה אחת מושלמת ב-2027, על מה היא הייתה?", placeholder: "למשל: איך לנהל צוות היברידי בלי לאבד קשר" },
-        { id: "w_team",    label: "צורך ספציפי של הצוות שלא הופיע כאן?",                 placeholder: "למשל: הכשרה על המערכת החדשה" }
+        { id: "w_team",    label: "צורך ספציפי של הצוות שלא הופיע כאן?",                 placeholder: "למשל: הכשרה על המערכת החדשה" },
+        { id: "w_clinical", label: "אילו הכשרות קליניות נדרשות לצוות שלך ב-2027?",        placeholder: "למשל: החייאה, טיפול בפצעים, הפעלת ציוד חדש" }
       ]
     }
   ]
