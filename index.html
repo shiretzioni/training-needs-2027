@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>צורכי הדרכה 2027</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Hebrew:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="grid-bg" aria-hidden="true"></div>
+
+  <main class="shell">
+    <!-- מסך 1: פתיחה -->
+    <section class="screen" id="screen-intro" data-screen="intro">
+      <p class="eyebrow mono">TNA · 2027</p>
+      <h1 class="hero-title">צורכי הדרכה <span class="accent">2027</span></h1>
+      <p class="hero-sub">שאלון למנהל.ת</p>
+      <p class="lead">
+        תכנית ההדרכה של 2027 תיבנה מהצרכים שלכם ושל הצוותים שלכם.
+        במקום שאלון ארוך, תעברו אבחון קצר ותקבלו בסופו תמונה ברורה של מוקדי הפיתוח שלכם.
+      </p>
+      <ul class="meta-row mono" aria-label="פרטי האבחון">
+        <li><span id="meta-minutes">4</span> דק׳</li>
+        <li><span id="meta-steps">5</span> שלבים</li>
+        <li>סיכום אישי בסוף</li>
+      </ul>
+      <button class="btn btn-primary" type="button" id="btn-start">בואו נתחיל!</button>
+      <p class="fine">התשובות מגיעות רק לצוות ההדרכה. מנהלים אחרים לא רואים אותן.</p>
+    </section>
+
+    <!-- מסך 2: פרטים -->
+    <section class="screen" id="screen-details" data-screen="details" hidden>
+      <p class="eyebrow mono">פרופיל</p>
+      <h2 class="screen-title">רגע לפני שמתחילים</h2>
+      <form id="details-form" class="form" novalidate onsubmit="return false">
+        <div class="field">
+          <label for="f-name">שם מלא</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="f-dept">מחלקה / יחידה</label>
+          <input id="f-dept" name="dept" type="text" autocomplete="organization-title" required>
+        </div>
+        <fieldset class="field">
+          <legend>דרג ניהולי</legend>
+          <div class="chips" id="level-chips" role="radiogroup"></div>
+        </fieldset>
+        <p class="error" id="details-error" role="alert" hidden></p>
+        <div class="actions">
+          <button class="btn btn-primary" type="submit">יאללה ממשיכים</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- מסך 3: אבחון -->
+    <section class="screen" id="screen-diag" data-screen="diag" hidden>
+      <nav class="hud" aria-label="התקדמות">
+        <ol class="hud-track" id="hud-track"></ol>
+      </nav>
+      <div id="step-host" class="step-host"></div>
+      <p class="error" id="step-error" role="alert" hidden></p>
+      <div class="actions">
+        <button class="btn btn-ghost" type="button" id="btn-back">חזרה</button>
+        <button class="btn btn-primary" type="button" id="btn-next">יאללה ממשיכים</button>
+      </div>
+    </section>
+
+    <!-- מסך 4: סיכום -->
+    <section class="screen" id="screen-summary" data-screen="summary" hidden>
+      <p class="eyebrow mono">מכ"ם צרכים · 2027</p>
+      <h2 class="screen-title" id="summary-title">הסיכום שלך</h2>
+      <p class="lead">זו התמונה שעולה מהתשובות שלך. עברו עליה, ואם משהו לא מדויק אפשר לחזור ולתקן.</p>
+
+      <div class="summary-grid">
+        <figure class="radar-card">
+          <div id="radar"></div>
+          <figcaption class="fine">ככל שהצורה רחוקה יותר מהמרכז, הצורך בתחום חזק יותר</figcaption>
+        </figure>
+        <div class="focus-card">
+          <h3 class="card-title">3 מוקדי הפיתוח שלך</h3>
+          <ol class="focus-list" id="focus-list"></ol>
+        </div>
+      </div>
+
+      <dl class="summary-list" id="summary-list"></dl>
+
+      <div class="actions">
+        <button class="btn btn-ghost" type="button" id="btn-edit">רוצה לתקן</button>
+        <button class="btn btn-primary" type="button" id="btn-submit">מאשר.ת ושולח.ת</button>
+      </div>
+      <p class="fine" id="submit-status" role="status"></p>
+    </section>
+
+    <!-- מסך 5: סיום -->
+    <section class="screen" id="screen-done" data-screen="done" hidden>
+      <div class="done-mark" id="done-mark" aria-hidden="true">
+        <svg viewBox="0 0 64 64" width="64" height="64"><circle cx="32" cy="32" r="29" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19 33l9 9 17-19" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h2 class="hero-title small">תודה על שיתוף הפעולה!</h2>
+      <p class="lead" id="done-text">הסיכום שלך התקבל אצל צוות ההדרכה ויהיה חלק מבניית תכנית 2027.</p>
+
+      <div class="fallback" id="fallback" hidden>
+        <h3 class="card-title">השליחה לא הצליחה</h3>
+        <p>כנראה שהרשת חוסמת את החיבור. כדי שהתשובות לא ילכו לאיבוד, הורידו את הסיכום ושלחו אותו במייל:</p>
+        <div class="actions start">
+          <button class="btn btn-primary" type="button" id="btn-download">הורדת הסיכום שלי</button>
+          <button class="btn btn-ghost" type="button" id="btn-retry">לנסות לשלוח שוב</button>
+        </div>
+        <p class="contact" id="contact-line" hidden>
+          לשליחה אל <span id="contact-name"></span>:
+          <span class="mono select" id="contact-email"></span>
+          <button class="btn btn-link" type="button" id="btn-copy">העתקה</button>
+        </p>
+      </div>
+
+      <div class="actions start" id="done-download-row">
+        <button class="btn btn-ghost" type="button" id="btn-download-copy">הורדת עותק של הסיכום</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>צורכי הדרכה 2027 · ניהול</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Hebrew:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .shell { max-width: 1080px; }
+    .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+    .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; display: grid; gap: 2px; }
+    .kpi b { font-family: var(--font-mono); font-size: 30px; font-weight: 500; font-variant-numeric: tabular-nums; }
+    .kpi span { color: var(--muted); font-size: 14px; }
+    .panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+    .bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+    .bars li { display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 4px 10px; font-size: 15px; }
+    .bars .bar { grid-column: 1 / -1; height: 6px; background: var(--line); border-radius: 6px; overflow: hidden; }
+    .bars .bar i { display: block; height: 100%; background: var(--accent); border-radius: 6px; }
+    .bars.energy-bars .bar i { background: var(--energy); }
+    .bars .num { font-family: var(--font-mono); text-align: end; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .toolbar select { font: inherit; font-size: 15px; color: var(--fg); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 999px; padding: 8px 14px; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); }
+    table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 760px; }
+    th, td { text-align: start; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-weight: 500; background: var(--surface-solid); position: sticky; top: 0; }
+    td.date { font-family: var(--font-mono); white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .quotes { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; max-height: 420px; overflow: auto; }
+    .quotes li { border-inline-start: 2px solid var(--accent); padding-inline-start: 10px; }
+    .quotes small { color: var(--muted); display: block; }
+    .login { max-width: 420px; }
+  </style>
+</head>
+<body>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <main class="shell">
+
+    <section class="screen login" id="login" hidden>
+      <p class="eyebrow mono">ניהול · TNA 2027</p>
+      <h1 class="screen-title">כניסה למסך התשובות</h1>
+      <p class="lead">רק לצוות ההדרכה. מתחברים עם המשתמש שהוגדר ב-Supabase.</p>
+      <form class="form" id="login-form" novalidate onsubmit="return false">
+        <div class="field"><label for="l-email">מייל</label><input id="l-email" type="text" inputmode="email" autocomplete="username" dir="ltr"></div>
+        <div class="field"><label for="l-pass">סיסמה</label><input id="l-pass" type="password" autocomplete="current-password" dir="ltr"></div>
+        <p class="error" id="login-error" role="alert" hidden></p>
+        <div class="actions start"><button class="btn btn-primary" type="submit">כניסה</button></div>
+      </form>
+    </section>
+
+    <section class="screen" id="dash" hidden>
+      <div class="toolbar" style="justify-content:space-between">
+        <div>
+          <p class="eyebrow mono">ניהול · TNA 2027</p>
+          <h1 class="screen-title">צורכי הדרכה 2027 · תמונת מצב</h1>
+        </div>
+        <div class="toolbar">
+          <button class="btn btn-primary" type="button" id="btn-csv">הורדה לאקסל (CSV)</button>
+          <button class="btn btn-ghost" type="button" id="btn-refresh">רענון</button>
+          <button class="btn btn-link" type="button" id="btn-logout">יציאה</button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <label for="flt-dept" class="fine">סינון:</label>
+        <select id="flt-dept"><option value="">כל המחלקות</option></select>
+        <select id="flt-level" aria-label="דרג"><option value="">כל הדרגים</option></select>
+        <span class="fine" id="flt-note"></span>
+      </div>
+
+      <div class="kpis" id="kpis"></div>
+
+      <div class="panels">
+        <div class="panel"><h2 class="card-title">תחומים רחבים · עוצמת צורך ממוצעת</h2><ul class="bars" id="p-themes"></ul></div>
+        <div class="panel"><h2 class="card-title">מוקד מספר 1 אצל מנהלים</h2><ul class="bars" id="p-focus1"></ul></div>
+        <div class="panel"><h2 class="card-title">הצוות · סך נקודות פיתוח</h2><ul class="bars energy-bars" id="p-team"></ul></div>
+        <div class="panel"><h2 class="card-title">אני כמנהל.ת · כמה בחרו</h2><ul class="bars" id="p-me"></ul></div>
+        <div class="panel"><h2 class="card-title">מהשטח · "זה אני"</h2><ul class="bars" id="p-reality"></ul></div>
+        <div class="panel"><h2 class="card-title">פורמט ושעות</h2><ul class="bars" id="p-how"></ul></div>
+      </div>
+
+      <div class="panel">
+        <h2 class="card-title">צרכים ספציפיים · במילים של המנהלים</h2>
+        <ul class="quotes" id="p-quotes"></ul>
+      </div>
+
+      <h2 class="card-title">כל התשובות</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>תאריך</th><th>שם</th><th>מחלקה</th><th>דרג</th><th>3 מוקדים</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table></div>
+      <p class="fine" id="dash-status" role="status"></p>
+    </section>
+
+    <section class="screen" id="not-configured" hidden>
+      <h1 class="screen-title">המאגר עוד לא מחובר</h1>
+      <p class="lead">ממלאים את config.js לפי "מדריך-הפעלה.md" ואז מרעננים את הדף.</p>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="questions.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
