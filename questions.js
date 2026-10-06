@@ -36,8 +36,7 @@ window.SURVEY = {
     { id: "change",  label: "שינוי וחוסן" },
     { id: "self",    label: "ניהול עצמי וזמן" },
     { id: "partner", label: "ממשקים ושותפויות" },
-    { id: "develop", label: "פיתוח עובדים ומשוב" },
-    { id: "digital", label: "דיגיטל ו-AI" }
+    { id: "develop", label: "פיתוח עובדים ומשוב" }
   ],
 
   // פרטי המנהל.ת – אפשר לשנות את אפשרויות הדרג
@@ -94,7 +93,6 @@ window.SURVEY = {
         { id: "s_meetings",  text: "היום שלי מנוהל בעיקר על ידי ישיבות ומיילים",               themes: ["self"] },
         { id: "s_newbies",   text: "יש בצוות עובדים חדשים שצריך להכשיר",                       themes: ["develop"] },
         { id: "s_interface", text: "חלק מהעבודה נתקע בגלל ממשק עם יחידה אחרת",                 themes: ["partner"] },
-        { id: "s_ai",        text: "הצוות שלי עוד לא משתמש בכלי AI בעבודה השוטפת",             themes: ["digital"] },
         { id: "s_alone",     text: "אני מקבל.ת הרבה החלטות לבד, והצוות פחות לוקח אחריות",      themes: ["lead"] }
       ]
     },
