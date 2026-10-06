@@ -7,7 +7,6 @@ create table if not exists public.responses (
   created_at    timestamptz not null default now(),
   name          text not null check (char_length(name) between 1 and 120),
   dept          text not null check (char_length(dept) between 1 and 120),
-  level         text,
   version       text,
   focus         jsonb,
   theme_scores  jsonb,

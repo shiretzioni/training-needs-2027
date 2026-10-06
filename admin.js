@@ -61,11 +61,9 @@
       sel.value = values.includes(cur) ? cur : "";
     };
     fill($("#flt-dept"), [...new Set(all.map((r) => r.dept))].sort((a, b) => a.localeCompare(b, "he")), "כל המחלקות");
-    fill($("#flt-level"), [...new Set(all.map((r) => r.level).filter(Boolean))], "כל הדרגים");
   }
   const filtered = () => all.filter((r) =>
-    (!$("#flt-dept").value || r.dept === $("#flt-dept").value) &&
-    (!$("#flt-level").value || r.level === $("#flt-level").value));
+    !$("#flt-dept").value || r.dept === $("#flt-dept").value);
 
   /* ---------- helpers ---------- */
   const stepOf = (type) => S.steps.filter((s) => s.type === type);
@@ -123,7 +121,7 @@
 
     $("#rows").replaceChildren(...rs.map((r) => el("tr", {},
       el("td", { class: "date", text: fmtDate(r.created_at) }),
-      el("td", { text: r.name }), el("td", { text: r.dept }), el("td", { text: r.level || "" }),
+      el("td", { text: r.name }), el("td", { text: r.dept }),
       el("td", { text: (r.focus || []).join(" · ") })
     )));
   }
@@ -138,7 +136,7 @@
   function csv() {
     const cols = [
       ["תאריך", (r) => fmtDate(r.created_at)],
-      ["שם", (r) => r.name], ["מחלקה", (r) => r.dept], ["דרג", (r) => r.level], ["גרסה", (r) => r.version],
+      ["שם", (r) => r.name], ["מחלקה", (r) => r.dept], ["גרסה", (r) => r.version],
       ["מוקד 1", (r) => (r.focus || [])[0]], ["מוקד 2", (r) => (r.focus || [])[1]], ["מוקד 3", (r) => (r.focus || [])[2]],
       ...S.themes.map((t) => ["ציון: " + t.label, (r) => (r.theme_scores || {})[t.id] || 0])
     ];
@@ -179,7 +177,6 @@
   $("#btn-csv").addEventListener("click", download);
   $("#btn-logout").addEventListener("click", () => { setToken(null); memToken = null; all = []; show("login"); });
   $("#flt-dept").addEventListener("change", render);
-  $("#flt-level").addEventListener("change", render);
 
   if (!BASE || !C.supabaseAnonKey) show("not-configured");
   else load().catch(() => show("login"));

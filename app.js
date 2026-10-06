@@ -36,7 +36,7 @@
     return a;
   }
 
-  let state = { name: "", dept: "", level: "", step: 0, answers: emptyAnswers() };
+  let state = { name: "", dept: "", step: 0, answers: emptyAnswers() };
 
   function saveDraft() {
     try { localStorage.setItem(DRAFT_KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ }
@@ -67,19 +67,9 @@
   $("#btn-start").addEventListener("click", () => { fillDetails(); show("details"); });
 
   /* ---------- details ---------- */
-  const levelHost = $("#level-chips");
-  function renderLevels() {
-    levelHost.replaceChildren(...S.levels.map((lv) =>
-      el("button", {
-        type: "button", class: "chip", role: "radio", "aria-checked": String(state.level === lv), text: lv,
-        onclick: () => { state.level = lv; renderLevels(); saveDraft(); }
-      })
-    ));
-  }
   function fillDetails() {
     $("#f-name").value = state.name;
     $("#f-dept").value = state.dept;
-    renderLevels();
   }
   $("#details-form").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -89,7 +79,6 @@
     const missing = [];
     if (!state.name) missing.push("שם");
     if (!state.dept) missing.push("מחלקה");
-    if (!state.level) missing.push("דרג ניהולי");
     if (missing.length) {
       err.textContent = "חסר: " + missing.join(", ");
       err.hidden = false;
@@ -385,7 +374,6 @@
     return {
       name: state.name,
       dept: state.dept,
-      level: state.level,
       version: S.version,
       focus: focus.map((id) => themeLabel[id]),
       theme_scores: scores,
@@ -400,7 +388,6 @@
       "",
       `שם: ${state.name}`,
       `מחלקה: ${state.dept}`,
-      `דרג: ${state.level}`,
       `תאריך: ${new Date().toLocaleDateString("he-IL")}`,
       "",
       "מוקדי פיתוח: " + (focus.map((id, i) => `${i + 1}. ${themeLabel[id]}`).join("  ") || "—"),
